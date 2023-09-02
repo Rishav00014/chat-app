@@ -1,0 +1,69 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 50px;
+}
+
+form {
+    background-color: #f4f4f4;
+    padding: 20px;
+    border-radius: 5px;
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+label {
+    display: block;
+    margin-bottom: 10px;
+}
+
+input[type="email"],
+input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+button {
+    padding: 10px 15px;
+    background-color: #333;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #555;
+}
+
+#chat-box {
+    overflow-y: auto;
+    max-height: 400px;
+    /* Adjust as needed */
+    padding: 10px;
+}
+
+.sent,
+.received {
+    max-width: 70%;
+    padding: 10px;
+    margin: 5px 0;
+    border-radius: 10px;
+    clear: both;
+}
+
+.sent {
+    background-color: #DCF8C6;
+    /* Light green, similar to WhatsApp */
+    float: right;
+    margin-right: 10px;
+}
+
+.received {
+    background-color: #ECECEC;
+    /* Light gray */
+    float: left;
+    margin-left: 10px;
+}

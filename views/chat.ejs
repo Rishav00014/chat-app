@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat with <%= otherUser.email %>
+    </title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+
+<body>
+    <h2>Chat with <%= otherUser.email %>
+    </h2>
+    <div id="chat-box">
+        <% messages.forEach(message=> { %>
+            <div class="<%= message.senderID.toString() == user._id.toString() ? 'sent' : 'received' %>">
+                <%= message.content %>
+            </div>
+
+            <% }); %>
+    </div>
+    <form id="chat-form">
+        <input type="text" id="message" placeholder="Type your message...">
+        <button type="submit">Send</button>
+    </form>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io.connect();
+
+        // Log in the user (associate this socket with the user ID)
+        socket.emit('login', '<%= user._id %>');
+        const chatForm = document.getElementById('chat-form');
+        chatForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const message = document.getElementById('message').value;
+            if (message.trim() !== '') {
+                socket.emit('send_message', {
+                    message: message,
+                    from: '<%= user._id %>',
+                    to: '<%= otherUser._id %>'
+                });
+                appendMessageToChatBox(message, '<%= user._id %>');
+
+                document.getElementById('message').value = '';
+            }
+
+        });
+        function appendMessageToChatBox(message, actualSenderId) {
+            const chatBox = document.getElementById('chat-box');
+            const messageElement = document.createElement('div');
+            messageElement.className = actualSenderId == '<%= user._id %>' ? 'sent' : 'received';
+            messageElement.textContent = message;
+            chatBox.appendChild(messageElement);
+            chatBox.scrollTop = chatBox.scrollHeight; // Auto-scroll to the bottom
+
+            // Clear floats after each message for proper layout
+            const clearDiv = document.createElement('div');
+            clearDiv.style.clear = 'both';
+            chatBox.appendChild(clearDiv);
+        }
+
+
+        // socket.on('receive_message', (data) => {
+        //     const chatBox = document.getElementById('chat-box');
+        //     const messageElement = document.createElement('div');
+        //     messageElement.className = data.from == '<%= user._id %>' ? 'sent' : 'received';
+        //     messageElement.textContent = data.message;
+        //     chatBox.appendChild(messageElement);
+        // });
+        // Update the receive_message listener to use the new function
+        socket.on('receive_message', (data) => {
+            appendMessageToChatBox(data.message, data.from);
+        });
+
+
+    </script>
+
+</body>
+
+</html>
